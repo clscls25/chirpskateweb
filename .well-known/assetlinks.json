@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.chirpskate.chirp_skate",
+    "sha256_cert_fingerprints": ["97:AF:A1:5D:64:C5:6B:93:8F:0A:A6:BE:AA:35:03:A4:E6:3C:89:21:33:81:DE:36:95:63:1B:F1:8B:02:03:63"]
+  }
+}]
