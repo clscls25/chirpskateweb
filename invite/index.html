@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Household - Chirp Skate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #3EA8DE 0%, #2d8bc9 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .download-btn {
+            display: block;
+            background: #3EA8DE;
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 10px 0;
+            transition: background 0.3s;
+        }
+        .download-btn:hover {
+            background: #2d8bc9;
+        }
+        .download-btn.apple {
+            background: #000;
+        }
+        .download-btn.apple:hover {
+            background: #333;
+        }
+        .instructions {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .footer {
+            margin-top: 20px;
+            color: #aaa;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="/logo.png" alt="Chirp Skate" class="logo">
+        <h1>You're Invited!</h1>
+        <p class="subtitle">Someone invited you to join their household on Chirp Skate - the smart way to track prices and save money.</p>
+
+        <a id="download-btn" href="#" class="download-btn">
+            Download Chirp Skate
+        </a>
+
+        <script>
+            const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.chirpskate.chirp_skate';
+            const appStoreUrl = 'https://apps.apple.com/app/chirp-skate/id0000000000';
+
+            const btn = document.getElementById('download-btn');
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isAndroid = /Android/.test(navigator.userAgent);
+
+            if (isIOS) {
+                btn.href = appStoreUrl;
+                btn.textContent = 'Download on App Store';
+                btn.classList.add('apple');
+            } else if (isAndroid) {
+                btn.href = playStoreUrl;
+                btn.textContent = 'Get it on Google Play';
+            } else {
+                // Desktop - show both options
+                btn.href = playStoreUrl;
+                btn.textContent = 'Get it on Google Play';
+                btn.insertAdjacentHTML('afterend',
+                    '<a href="' + appStoreUrl + '" class="download-btn apple">Download on App Store</a>'
+                );
+            }
+        </script>
+
+        <div class="instructions">
+            <strong>Already have the app?</strong><br>
+            Open Chirp Skate and check your pending invitations in Settings → Household Sharing
+        </div>
+
+        <div class="footer">
+            © 2026 Chirp Skate
+        </div>
+    </div>
+</body>
+</html>
