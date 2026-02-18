@@ -1,128 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join Household - Chirp Skate</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #3EA8DE 0%, #2d8bc9 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
-        .logo {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 20px;
-        }
-        h1 {
-            color: #333;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            color: #666;
-            font-size: 16px;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-        .download-btn {
-            display: block;
-            background: #3EA8DE;
-            color: white;
-            text-decoration: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            margin: 10px 0;
-            transition: background 0.3s;
-        }
-        .download-btn:hover {
-            background: #2d8bc9;
-        }
-        .download-btn.apple {
-            background: #000;
-        }
-        .download-btn.apple:hover {
-            background: #333;
-        }
-        .instructions {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            color: #888;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-        .footer {
-            margin-top: 20px;
-            color: #aaa;
-            font-size: 12px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join Household – Chirp Skate</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #3EA8DE 0%, #2d8bc9 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 48px 40px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 18px;
+      margin-bottom: 16px;
+    }
+
+    .app-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #3EA8DE;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    .open-btn {
+      display: block;
+      background: #3EA8DE;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 16px 24px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      transition: background 0.2s;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+    }
+
+    .open-btn:hover { background: #2d8bc9; }
+
+    .open-btn.store {
+      background: #1a1a1a;
+      font-size: 15px;
+    }
+
+    .open-btn.store:hover { background: #333; }
+
+    .open-btn.store.apple { background: #1a1a1a; }
+
+    .status {
+      font-size: 13px;
+      color: #999;
+      min-height: 20px;
+      margin-bottom: 16px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: #ccc;
+      font-size: 13px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #eee;
+    }
+
+    .instructions {
+      font-size: 13px;
+      color: #999;
+      line-height: 1.6;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .footer {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #ccc;
+    }
+
+    .footer a { color: #ccc; text-decoration: underline; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <img src="/logo.png" alt="Chirp Skate" class="logo">
-        <h1>You're Invited!</h1>
-        <p class="subtitle">Someone invited you to join their household on Chirp Skate - the smart way to track prices and save money.</p>
+  <div class="card">
+    <img src="/logo.png" alt="Chirp Skate" class="logo" onerror="this.style.display='none'">
+    <div class="app-name">Chirp Skate</div>
 
-        <a id="download-btn" href="#" class="download-btn">
-            Download Chirp Skate
-        </a>
+    <h1>You've been invited!</h1>
+    <p class="subtitle">
+      Someone has invited you to join their household — track what you spend,
+      compare prices across stores, and shop smarter together.
+    </p>
 
-        <script>
-            const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.chirpskate.chirp_skate';
-            const appStoreUrl = 'https://apps.apple.com/app/chirp-skate/id0000000000';
+    <a class="open-btn" id="openBtn" href="#">Open in Chirp Skate</a>
+    <div class="status" id="status"></div>
 
-            const btn = document.getElementById('download-btn');
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-            const isAndroid = /Android/.test(navigator.userAgent);
-
-            if (isIOS) {
-                btn.href = appStoreUrl;
-                btn.textContent = 'Download on App Store';
-                btn.classList.add('apple');
-            } else if (isAndroid) {
-                btn.href = playStoreUrl;
-                btn.textContent = 'Get it on Google Play';
-            } else {
-                // Desktop - show both options
-                btn.href = playStoreUrl;
-                btn.textContent = 'Get it on Google Play';
-                btn.insertAdjacentHTML('afterend',
-                    '<a href="' + appStoreUrl + '" class="download-btn apple">Download on App Store</a>'
-                );
-            }
-        </script>
-
-        <div class="instructions">
-            <strong>Already have the app?</strong><br>
-            Open Chirp Skate and check your pending invitations in Settings → Household Sharing
-        </div>
-
-        <div class="footer">
-            © 2026 Chirp Skate
-        </div>
+    <div id="storeButtons" style="display:none;">
+      <div class="divider">Get the app first</div>
+      <a class="open-btn store" id="playBtn" href="https://play.google.com/store/apps/details?id=com.chirpskate.chirp_skate">
+        Get it on Google Play
+      </a>
+      <a class="open-btn store apple" id="appleBtn" href="https://apps.apple.com/app/chirp-skate/id0000000000">
+        Download on the App Store
+      </a>
     </div>
+
+    <div class="instructions">
+      <strong>Already have the app?</strong><br>
+      If it doesn't open automatically, go to<br>
+      <strong>Household → Pending Invites</strong> inside the app.
+    </div>
+
+    <div class="footer">
+      © 2026 Chirp Skate ·
+      <a href="https://chirpskate.com">chirpskate.com</a>
+    </div>
+  </div>
+
+  <script>
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    const householdId = pathParts[pathParts.length - 1];
+
+    const openBtn  = document.getElementById('openBtn');
+    const status   = document.getElementById('status');
+    const storeBtns = document.getElementById('storeButtons');
+    const playBtn  = document.getElementById('playBtn');
+    const appleBtn = document.getElementById('appleBtn');
+
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isIOS     = /iPad|iPhone|iPod/i.test(navigator.userAgent);
+
+    // Hide irrelevant store button
+    if (isAndroid) appleBtn.style.display = 'none';
+    if (isIOS)     playBtn.style.display  = 'none';
+
+    if (!householdId || householdId === 'invite') {
+      openBtn.style.display = 'none';
+      status.textContent = 'This invite link appears to be invalid.';
+    } else {
+      const deepLink = 'chirpskate://invite/' + householdId;
+
+      openBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = deepLink;
+
+        // Show download options after a delay in case app isn't installed
+        setTimeout(function() {
+          storeBtns.style.display = 'block';
+          status.textContent = "App didn't open? Download it below, then try again.";
+        }, 2500);
+      });
+
+      // On Android with App Links verified, the OS may redirect before this page loads.
+      // Attempt deep link automatically on mobile.
+      if (isAndroid || isIOS) {
+        setTimeout(function() {
+          window.location.href = deepLink;
+          setTimeout(function() {
+            storeBtns.style.display = 'block';
+            status.textContent = "App didn't open? Download it below, then try again.";
+          }, 2500);
+        }, 300);
+      }
+    }
+  </script>
 </body>
 </html>

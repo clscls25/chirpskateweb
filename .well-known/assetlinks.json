@@ -3,6 +3,10 @@
   "target": {
     "namespace": "android_app",
     "package_name": "com.chirpskate.chirp_skate",
-    "sha256_cert_fingerprints": ["97:AF:A1:5D:64:C5:6B:93:8F:0A:A6:BE:AA:35:03:A4:E6:3C:89:21:33:81:DE:36:95:63:1B:F1:8B:02:03:63"]
+    "sha256_cert_fingerprints": [
+      "97:AF:A1:5D:64:C5:6B:93:8F:0A:A6:BE:AA:35:03:A4:E6:3C:89:21:33:81:DE:36:95:63:1B:F1:8B:02:03:63",
+      "37:F3:70:AA:9D:C2:04:76:08:49:9B:F4:08:C7:0C:FB:DE:FC:EE:E4:AE:33:BF:69:B7:59:A1:EA:67:73:D4:F6",
+      "64:19:03:A1:DE:72:C1:4F:7A:12:55:17:11:1A:15:23:AD:0F:8F:29:1E:EE:02:85:CE:CA:C3:98:F3:9A:47:5A"
+    ]
   }
 }]
