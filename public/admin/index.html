@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Blog Editor — Chirp Skate</title>
+<link rel="icon" href="/logo.png" type="image/png" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<style>
+  :root {
+    --primary: #42A4D1;
+    --primary-dark: #2d8bc9;
+    --text: #111827;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --bg: #ffffff;
+    --bg-soft: #f9fafb;
+    --danger: #dc2626;
+    --amber-bg: #fef3c7;
+    --amber-text: #92400e;
+    --green-bg: #dcfce7;
+    --green-text: #166534;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    --mono: 'SF Mono', Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: var(--font); color: var(--text); background: var(--bg); font-size: 15px; }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  a { color: var(--primary); text-decoration: none; }
+  [hidden] { display: none !important; }
+
+  .btn {
+    border: 1px solid var(--border); background: var(--bg); border-radius: 8px;
+    padding: 8px 14px; cursor: pointer; font-weight: 500; white-space: nowrap;
+  }
+  .btn:hover { background: var(--bg-soft); }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-danger { color: var(--danger); }
+  .btn-ghost { border-color: transparent; background: transparent; }
+
+  /* Login */
+  .login { min-height: 100%; display: grid; place-items: center; padding: 16px; background: var(--bg-soft); }
+  .login form {
+    width: 100%; max-width: 360px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px; display: grid; gap: 14px;
+  }
+  .login img { width: 48px; height: 48px; }
+  .login h1 { font-size: 20px; }
+  .login p { color: var(--text-muted); font-size: 14px; }
+
+  /* App shell */
+  .app { display: grid; grid-template-columns: 260px 1fr; height: 100%; }
+  .sidebar { border-right: 1px solid var(--border); display: flex; flex-direction: column; min-height: 0; background: var(--bg-soft); }
+  .sidebar-head { padding: 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
+  .sidebar-head img { width: 28px; height: 28px; }
+  .sidebar-head strong { flex: 1; }
+  .sidebar .new { margin: 12px 16px; }
+  .post-list { list-style: none; overflow-y: auto; flex: 1; padding: 0 8px 16px; }
+  .post-list li button {
+    width: 100%; text-align: left; border: 0; background: transparent; border-radius: 8px;
+    padding: 10px; cursor: pointer; display: grid; gap: 3px;
+  }
+  .post-list li button:hover { background: #eef2f6; }
+  .post-list li button.active { background: #e0f2fb; }
+  .post-list .t { font-weight: 600; font-size: 14px; line-height: 1.3; }
+  .post-list .m { font-size: 12px; color: var(--text-muted); display: flex; gap: 6px; align-items: center; }
+  .badge { font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 999px; }
+  .badge.draft { background: var(--amber-bg); color: var(--amber-text); }
+  .badge.live { background: var(--green-bg); color: var(--green-text); }
+  .sidebar-foot { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 13px; }
+
+  .main { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+  .empty { margin: auto; color: var(--text-muted); text-align: center; padding: 24px; }
+
+  .meta { padding: 20px 24px 12px; display: grid; gap: 12px; border-bottom: 1px solid var(--border); }
+  .title-input { font-size: 26px; font-weight: 800; border: 0; outline: none; width: 100%; letter-spacing: -.3px; }
+  .title-input::placeholder { color: #c4c9d1; }
+  .fields { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
+  .field { display: grid; gap: 4px; font-size: 12px; color: var(--text-muted); font-weight: 500; }
+  .field input, .field textarea {
+    border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 14px; color: var(--text); width: 100%;
+  }
+  .field input:focus, .field textarea:focus, .title-input:focus { outline: 2px solid #bfe3f3; outline-offset: 0; }
+  .field textarea { resize: vertical; min-height: 44px; }
+  .slug-wrap { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .slug-wrap span { padding: 8px 0 8px 10px; color: var(--text-muted); font-size: 14px; white-space: nowrap; }
+  .slug-wrap input { border: 0; padding-left: 2px; }
+  .slug-wrap input:disabled { background: transparent; color: var(--text-muted); }
+
+  .toolbar { display: flex; gap: 2px; padding: 6px 16px; border-bottom: 1px solid var(--border); flex-wrap: wrap; align-items: center; }
+  .toolbar .tb { border: 0; background: transparent; border-radius: 6px; padding: 6px 9px; cursor: pointer; min-width: 32px; font-weight: 600; font-size: 14px; }
+  .toolbar .tb:hover { background: var(--bg-soft); }
+  .toolbar .sep { width: 1px; height: 20px; background: var(--border); margin: 0 6px; }
+  .toolbar .spacer { flex: 1; }
+  .tabs { display: none; gap: 2px; }
+  .tabs button { border: 0; background: transparent; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-weight: 500; color: var(--text-muted); }
+  .tabs button.on { background: var(--bg-soft); color: var(--text); }
+
+  .panes { flex: 1; display: grid; grid-template-columns: 1fr 1fr; min-height: 0; }
+  .pane { min-height: 0; overflow-y: auto; }
+  #body {
+    width: 100%; height: 100%; border: 0; outline: none; resize: none; padding: 20px 24px;
+    font-family: var(--mono); font-size: 14px; line-height: 1.7; border-right: 1px solid var(--border);
+  }
+  #body.dragover { background: #f0f9fd; }
+  .preview-wrap { padding: 24px 32px 48px; }
+  .preview-wrap .p-title { font-size: 30px; font-weight: 800; line-height: 1.2; letter-spacing: -.5px; margin-bottom: 10px; }
+  .preview-wrap .p-desc { font-size: 17px; color: var(--text-muted); line-height: 1.6; padding-bottom: 20px; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
+
+  /* Mirrors .prose in src/layouts/BaseLayout.astro */
+  .prose { font-size: 17px; line-height: 1.75; color: #374151; }
+  .prose h2 { font-size: 22px; font-weight: 700; color: var(--text); margin: 2em 0 .6em; line-height: 1.3; }
+  .prose h3 { font-size: 18px; font-weight: 600; color: var(--text); margin: 1.6em 0 .5em; }
+  .prose p { margin-bottom: 1.25em; }
+  .prose ul, .prose ol { margin: 0 0 1.25em 1.5em; }
+  .prose li { margin-bottom: .4em; }
+  .prose strong { color: var(--text); font-weight: 600; }
+  .prose code { font-family: var(--mono); font-size: .875em; background: #f3f4f6; padding: 2px 6px; border-radius: 4px; }
+  .prose blockquote { border-left: 3px solid var(--primary); padding-left: 1em; margin: 1.5em 0; color: var(--text-muted); font-style: italic; }
+  .prose hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
+  .prose img { max-width: 100%; height: auto; border-radius: 10px; margin: .5em 0 1.25em; }
+
+  .actions { display: flex; align-items: center; gap: 10px; padding: 12px 24px; border-top: 1px solid var(--border); background: var(--bg); }
+  .status { flex: 1; font-size: 13px; color: var(--text-muted); min-width: 0; }
+  .status.err { color: var(--danger); }
+  .status.ok { color: var(--green-text); }
+
+  .menu-btn { display: none; }
+
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { position: fixed; inset: 0; z-index: 10; transform: translateX(-100%); transition: transform .2s; }
+    .app.show-list .sidebar { transform: none; }
+    .menu-btn { display: inline-block; }
+    .meta { padding: 12px 16px; }
+    .title-input { font-size: 22px; }
+    .fields { grid-template-columns: 1fr 1fr; }
+    .fields .field:first-child { grid-column: 1 / -1; }
+    .tabs { display: flex; }
+    .panes { grid-template-columns: 1fr; }
+    .panes[data-tab="write"] .pane.preview { display: none; }
+    .panes[data-tab="preview"] .pane.write { display: none; }
+    #body { padding: 16px; border-right: 0; }
+    .preview-wrap { padding: 16px; }
+    .actions { padding: 10px 16px; flex-wrap: wrap; }
+    .status { flex-basis: 100%; order: -1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div class="login" id="login" hidden>
+  <form id="login-form">
+    <img src="/logo.png" alt="" />
+    <h1>Chirp Skate Blog</h1>
+    <p>Enter the admin password to write and publish posts.</p>
+    <div class="field"><input type="password" id="pw" placeholder="Password" autocomplete="current-password" required /></div>
+    <button class="btn btn-primary" type="submit">Sign in</button>
+    <p class="status err" id="login-err"></p>
+  </form>
+</div>
+
+<!-- App -->
+<div class="app" id="app" hidden>
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <img src="/logo.png" alt="" />
+      <strong>Posts</strong>
+      <button class="btn btn-ghost menu-btn" id="close-list" aria-label="Close list">✕</button>
+    </div>
+    <button class="btn btn-primary new" id="new-post">+ New post</button>
+    <ul class="post-list" id="post-list"></ul>
+    <div class="sidebar-foot">
+      <a href="/blog" target="_blank">View blog ↗</a>
+      <a href="#" id="logout">Sign out</a>
+    </div>
+  </aside>
+
+  <section class="main">
+    <div class="empty" id="empty">
+      <p>Loading posts…</p>
+    </div>
+
+    <div id="editor" hidden style="display:flex;flex-direction:column;flex:1;min-height:0">
+      <div class="meta">
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-ghost menu-btn" id="open-list" aria-label="Posts">☰</button>
+          <input class="title-input" id="title" placeholder="Post title" autocomplete="off" />
+        </div>
+        <div class="fields">
+          <label class="field">URL
+            <div class="slug-wrap"><span>/blog/</span><input id="slug" autocomplete="off" spellcheck="false" /></div>
+          </label>
+          <label class="field">Date <input type="date" id="date" /></label>
+          <label class="field">Author <input id="author" placeholder="Chirp Skate" /></label>
+        </div>
+        <label class="field">Summary (shown in the blog list and search results)
+          <textarea id="description" rows="2" placeholder="One or two sentences about the post"></textarea>
+        </label>
+      </div>
+
+      <div class="toolbar">
+        <button class="tb" data-md="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+        <button class="tb" data-md="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+        <span class="sep"></span>
+        <button class="tb" data-md="h2" title="Heading">H2</button>
+        <button class="tb" data-md="h3" title="Subheading">H3</button>
+        <span class="sep"></span>
+        <button class="tb" data-md="ul" title="Bulleted list">•</button>
+        <button class="tb" data-md="ol" title="Numbered list">1.</button>
+        <button class="tb" data-md="quote" title="Quote">❝</button>
+        <button class="tb" data-md="link" title="Link (Ctrl+K)">🔗</button>
+        <button class="tb" data-md="image" title="Upload image">🖼</button>
+        <span class="spacer"></span>
+        <div class="tabs" id="tabs">
+          <button data-tab="write" class="on">Write</button>
+          <button data-tab="preview">Preview</button>
+        </div>
+        <input type="file" id="image-file" accept="image/png,image/jpeg,image/gif,image/webp" hidden />
+      </div>
+
+      <div class="panes" id="panes" data-tab="write">
+        <div class="pane write"><textarea id="body" placeholder="Write your post in Markdown…&#10;&#10;## A heading&#10;&#10;Some **bold** text. Drag an image in here to upload it."></textarea></div>
+        <div class="pane preview"><div class="preview-wrap">
+          <h1 class="p-title" id="p-title"></h1>
+          <p class="p-desc" id="p-desc"></p>
+          <div class="prose" id="preview"></div>
+        </div></div>
+      </div>
+
+      <div class="actions">
+        <span class="status" id="status"></span>
+        <button class="btn btn-danger" id="delete" hidden>Delete</button>
+        <button class="btn" id="save-draft">Save draft</button>
+        <button class="btn btn-primary" id="publish">Publish</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  del(k) { try { localStorage.removeItem(k); } catch {} },
+};
+
+let password = store.get('cs_admin_pw') || '';
+let posts = [];
+let current = null;      // { slug, sha, draft } for saved posts; { slug: null } for new
+let dirty = false;
+let slugTouched = false;
+const localImages = new Map(); // uploaded url -> object URL, so preview works before deploy finishes
+
+// ---------- API ----------
+async function api(path, opts = {}) {
+  const res = await fetch('/api/admin/' + path, {
+    ...opts,
+    headers: { Authorization: 'Bearer ' + password, ...(opts.json ? { 'Content-Type': 'application/json' } : {}) },
+    body: opts.json ? JSON.stringify(opts.json) : opts.body,
+  });
+  const data = await res.json().catch(() => ({ error: 'Unexpected server response (' + res.status + ')' }));
+  if (res.status === 401) { showLogin('Wrong password.'); throw new Error('Unauthorized'); }
+  if (!res.ok) throw new Error(data.error || 'Request failed');
+  return data;
+}
+
+// ---------- Auth ----------
+function showLogin(msg) {
+  store.del('cs_admin_pw');
+  $('app').hidden = true;
+  $('login').hidden = false;
+  $('login-err').textContent = msg || '';
+  $('pw').focus();
+}
+$('login-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  password = $('pw').value;
+  $('login-err').textContent = '';
+  try {
+    await api('login', { method: 'POST' });
+    store.set('cs_admin_pw', password);
+    start();
+  } catch (err) {
+    if (err.message !== 'Unauthorized') $('login-err').textContent = err.message;
+  }
+});
+$('logout').addEventListener('click', e => { e.preventDefault(); if (confirmLeave()) { password = ''; showLogin(); } });
+
+async function start() {
+  $('login').hidden = true;
+  $('app').hidden = false;
+  await loadList();
+  if (!current) {
+    $('empty').innerHTML = posts.length
+      ? '<p>Pick a post on the left, or start a new one.</p>'
+      : '<p>No posts yet.</p>';
+  }
+}
+
+// ---------- List ----------
+async function loadList() {
+  try {
+    posts = (await api('posts')).posts;
+    renderList();
+  } catch (err) {
+    if (err.message !== 'Unauthorized') $('empty').innerHTML = '<p class="status err">' + escapeHtml(err.message) + '</p>';
+  }
+}
+function renderList() {
+  $('post-list').innerHTML = posts.map(p => `
+    <li><button data-slug="${p.slug}" class="${current && current.slug === p.slug ? 'active' : ''}">
+      <span class="t">${escapeHtml(p.title || p.slug)}</span>
+      <span class="m">${escapeHtml(formatDate(p.date))}
+        <span class="badge ${p.draft ? 'draft' : 'live'}">${p.draft ? 'Draft' : 'Live'}</span></span>
+    </button></li>`).join('');
+}
+$('post-list').addEventListener('click', e => {
+  const b = e.target.closest('button[data-slug]');
+  if (b && confirmLeave()) openPost(b.dataset.slug);
+});
+$('new-post').addEventListener('click', () => { if (confirmLeave()) newPost(); });
+$('open-list').addEventListener('click', () => $('app').classList.add('show-list'));
+$('close-list').addEventListener('click', () => $('app').classList.remove('show-list'));
+
+// ---------- Editor ----------
+function showEditor() {
+  $('empty').hidden = true;
+  $('editor').hidden = false;
+  $('app').classList.remove('show-list');
+}
+function fill(data, body) {
+  $('title').value = data.title || '';
+  $('description').value = data.description || '';
+  $('date').value = data.date || today();
+  $('author').value = data.author && data.author !== 'Chirp Skate' ? data.author : '';
+  $('body').value = body || '';
+  render();
+  dirty = false;
+  updateButtons();
+}
+function newPost() {
+  current = { slug: null, sha: null, draft: true };
+  slugTouched = false;
+  $('slug').disabled = false;
+  $('slug').value = '';
+  fill({}, '');
+  setStatus('');
+  showEditor();
+  renderList();
+  $('title').focus();
+}
+async function openPost(slug) {
+  setStatus('Loading…');
+  showEditor();
+  try {
+    const p = await api('posts/' + slug);
+    current = { slug, sha: p.sha, draft: !!p.data.draft };
+    $('slug').value = slug;
+    $('slug').disabled = true;
+    fill(p.data, p.body);
+    setStatus(current.draft ? 'Draft — not visible on the site.' : 'Live at ' + liveLink(slug), false, true);
+    renderList();
+  } catch (err) { setStatus(err.message, true); }
+}
+function updateButtons() {
+  const saved = current && current.sha;
+  $('delete').hidden = !saved;
+  $('publish').textContent = saved && !current.draft ? 'Update' : 'Publish';
+  $('save-draft').textContent = saved && !current.draft ? 'Unpublish' : 'Save draft';
+}
+
+['title', 'description', 'date', 'author', 'body', 'slug'].forEach(id =>
+  $(id).addEventListener('input', () => { dirty = true; if (id === 'slug') slugTouched = true; render(); }));
+$('title').addEventListener('input', () => {
+  if (current && !current.sha && !slugTouched) $('slug').value = slugify($('title').value);
+});
+$('slug').addEventListener('blur', () => { $('slug').value = slugify($('slug').value); });
+
+function render() {
+  $('p-title').textContent = $('title').value || 'Untitled post';
+  $('p-desc').textContent = $('description').value;
+  let html = DOMPurify.sanitize(marked.parse($('body').value));
+  for (const [url, obj] of localImages) html = html.split('src="' + url + '"').join('src="' + obj + '"');
+  $('preview').innerHTML = html;
+}
+
+// ---------- Save ----------
+async function save(draft) {
+  const slug = current.sha ? current.slug : slugify($('slug').value || $('title').value);
+  const data = {
+    title: $('title').value.trim(),
+    description: $('description').value.trim(),
+    date: $('date').value,
+    author: $('author').value.trim() || 'Chirp Skate',
+    draft,
+  };
+  if (!data.title) return setStatus('Add a title first.', true);
+  if (!data.description) return setStatus('Add a short summary first.', true);
+  if (!slug) return setStatus('Add a URL for the post.', true);
+
+  setBusy(true);
+  setStatus('Saving…');
+  try {
+    const wasLive = current.sha && !current.draft;
+    const res = await api('posts/' + slug, { method: 'PUT', json: { data, body: $('body').value, sha: current.sha } });
+    current = { slug, sha: res.sha, draft };
+    $('slug').value = slug;
+    $('slug').disabled = true;
+    dirty = false;
+    updateButtons();
+    await loadList();
+    if (draft) {
+      setStatus(wasLive ? 'Unpublished. It will disappear from the site in about a minute.' : 'Draft saved. It isn\'t visible on the site.', false, true);
+    } else {
+      setStatus('Published! Going live at ' + liveLink(slug) + ' in about a minute…', false, true);
+      waitForLive(slug, wasLive);
+    }
+  } catch (err) {
+    if (err.message !== 'Unauthorized') setStatus(err.message, true);
+  } finally { setBusy(false); }
+}
+$('publish').addEventListener('click', () => save(false));
+$('save-draft').addEventListener('click', () => {
+  if (current.sha && !current.draft && !confirm('Take this post off the site and turn it back into a draft?')) return;
+  save(true);
+});
+
+// New posts: poll until the page exists. Updates: just give it time.
+async function waitForLive(slug, wasLive) {
+  if (wasLive) {
+    setTimeout(() => { if (current && current.slug === slug && !dirty) setStatus('Updated — live at ' + liveLink(slug), false, true); }, 90000);
+    return;
+  }
+  for (let i = 0; i < 36; i++) {
+    await new Promise(r => setTimeout(r, 5000));
+    try {
+      const r = await fetch('/blog/' + slug + '/', { cache: 'no-store', method: 'HEAD' });
+      if (r.ok) {
+        if (current && current.slug === slug && !dirty) setStatus('Live at ' + liveLink(slug), false, true);
+        return;
+      }
+    } catch {}
+  }
+}
+
+$('delete').addEventListener('click', async () => {
+  if (!confirm('Delete "' + ($('title').value || current.slug) + '" permanently?')) return;
+  setBusy(true);
+  try {
+    await api('posts/' + current.slug, { method: 'DELETE', json: { sha: current.sha } });
+    current = null;
+    dirty = false;
+    $('editor').hidden = true;
+    $('empty').hidden = false;
+    $('empty').innerHTML = '<p>Post deleted. It will disappear from the site in about a minute.</p>';
+    await loadList();
+  } catch (err) { if (err.message !== 'Unauthorized') setStatus(err.message, true); }
+  finally { setBusy(false); }
+});
+
+function setBusy(b) { ['publish', 'save-draft', 'delete'].forEach(id => $(id).disabled = b); }
+function setStatus(msg, isErr, isHtml) {
+  const s = $('status');
+  s.className = 'status' + (isErr ? ' err' : '');
+  if (isHtml) s.innerHTML = msg; else s.textContent = msg;
+}
+
+// ---------- Markdown toolbar ----------
+const ta = $('body');
+function wrap(before, after, placeholder) {
+  const { selectionStart: s, selectionEnd: e, value: v } = ta;
+  const sel = v.slice(s, e) || placeholder;
+  ta.setRangeText(before + sel + after, s, e, 'end');
+  ta.setSelectionRange(s + before.length, s + before.length + sel.length);
+  changed();
+}
+function prefixLines(fn) {
+  const { selectionStart: s, selectionEnd: e, value: v } = ta;
+  const ls = v.lastIndexOf('\n', s - 1) + 1;
+  const le = v.indexOf('\n', e); const end = le === -1 ? v.length : le;
+  const lines = v.slice(ls, end).split('\n').map(fn);
+  ta.setRangeText(lines.join('\n'), ls, end, 'end');
+  changed();
+}
+function insertAtCursor(text) {
+  const { selectionStart: s, selectionEnd: e } = ta;
+  ta.setRangeText(text, s, e, 'end');
+  changed();
+}
+function changed() { ta.focus(); dirty = true; render(); }
+
+const actions = {
+  bold: () => wrap('**', '**', 'bold text'),
+  italic: () => wrap('*', '*', 'italic text'),
+  h2: () => prefixLines(l => '## ' + l.replace(/^#+\s*/, '')),
+  h3: () => prefixLines(l => '### ' + l.replace(/^#+\s*/, '')),
+  ul: () => prefixLines(l => '- ' + l),
+  ol: () => { let n = 0; prefixLines(l => (++n) + '. ' + l); },
+  quote: () => prefixLines(l => '> ' + l),
+  link: () => { const url = prompt('Link URL', 'https://'); if (url) wrap('[', '](' + url + ')', 'link text'); },
+  image: () => $('image-file').click(),
+};
+document.querySelectorAll('[data-md]').forEach(b => b.addEventListener('click', () => actions[b.dataset.md]()));
+
+ta.addEventListener('keydown', e => {
+  if (!(e.ctrlKey || e.metaKey)) return;
+  const k = e.key.toLowerCase();
+  if (k === 'b') { e.preventDefault(); actions.bold(); }
+  if (k === 'i') { e.preventDefault(); actions.italic(); }
+  if (k === 'k') { e.preventDefault(); actions.link(); }
+});
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's' && current) {
+    e.preventDefault();
+    save(current.sha ? current.draft : true);
+  }
+});
+
+// ---------- Images ----------
+async function uploadImage(file) {
+  const placeholder = '![Uploading ' + file.name + '…]()';
+  insertAtCursor('\n' + placeholder + '\n');
+  setStatus('Uploading image…');
+  const fd = new FormData();
+  fd.append('file', file);
+  try {
+    const { url } = await api('images', { method: 'POST', body: fd });
+    localImages.set(url, URL.createObjectURL(file));
+    const alt = file.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ');
+    ta.value = ta.value.replace(placeholder, '![' + alt + '](' + url + ')');
+    setStatus('Image uploaded.');
+  } catch (err) {
+    ta.value = ta.value.replace(placeholder, '');
+    if (err.message !== 'Unauthorized') setStatus(err.message, true);
+  }
+  changed();
+}
+$('image-file').addEventListener('change', e => { const f = e.target.files[0]; if (f) uploadImage(f); e.target.value = ''; });
+ta.addEventListener('dragover', e => { e.preventDefault(); ta.classList.add('dragover'); });
+ta.addEventListener('dragleave', () => ta.classList.remove('dragover'));
+ta.addEventListener('drop', e => {
+  ta.classList.remove('dragover');
+  const f = [...(e.dataTransfer?.files || [])].find(f => f.type.startsWith('image/'));
+  if (f) { e.preventDefault(); uploadImage(f); }
+});
+ta.addEventListener('paste', e => {
+  const f = [...(e.clipboardData?.files || [])].find(f => f.type.startsWith('image/'));
+  if (f) { e.preventDefault(); uploadImage(f); }
+});
+
+// ---------- Mobile tabs ----------
+$('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button[data-tab]');
+  if (!b) return;
+  $('panes').dataset.tab = b.dataset.tab;
+  $('tabs').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+});
+
+// ---------- Helpers ----------
+function confirmLeave() { return !dirty || confirm('You have unsaved changes. Discard them?'); }
+window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+function slugify(s) { return s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80); }
+function today() { const d = new Date(); return new Date(d - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); }
+function formatDate(s) {
+  if (!s) return '';
+  const d = new Date(s + 'T12:00:00');
+  return isNaN(d) ? s : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+function liveLink(slug) { return '<a href="/blog/' + slug + '/" target="_blank">chirpskate.com/blog/' + slug + '</a>'; }
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+marked.setOptions({ gfm: true, breaks: false });
+if (password) {
+  api('login', { method: 'POST' }).then(start).catch(err => { if (err.message !== 'Unauthorized') showLogin(err.message); });
+} else {
+  showLogin();
+}
+</script>
+</body>
+</html>
