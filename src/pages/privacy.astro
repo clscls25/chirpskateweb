@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+// Keep in sync with _privacyPolicyContent in the app
+// (chirp_skate/lib/features/settings/screens/settings_screen.dart).
+---
+
+<BaseLayout
+  title="Privacy Policy — Chirp Skate"
+  description="How Chirp Skate collects, uses and protects your information."
+>
+  <article class="legal">
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated: October 2026</p>
+
+    <div class="prose">
+      <h2>1. Information We Collect</h2>
+      <p><strong>Account information</strong></p>
+      <ul>
+        <li>Email address and sign-in method (email, Google or Apple)</li>
+        <li>Display name (optional)</li>
+      </ul>
+      <p><strong>What you add to the app</strong></p>
+      <ul>
+        <li>Purchases, items, folders, stores and prices</li>
+        <li>Tips, fees, budgets and notes you enter</li>
+        <li>Receipt photos, screenshots and PDFs you scan</li>
+        <li>Feedback you send us</li>
+      </ul>
+      <p>We do not use analytics, advertising or crash-tracking tools, and we do not collect your location.</p>
+
+      <h2>2. How We Use Your Information</h2>
+      <p>We use your information only to:</p>
+      <ul>
+        <li>Provide the app's features (tracking, reports, search)</li>
+        <li>Read receipts you choose to scan</li>
+        <li>Sync your data across your devices</li>
+        <li>Share data with household members you invite</li>
+        <li>Answer feedback and support requests</li>
+      </ul>
+
+      <h2>3. Data Storage and Security</h2>
+      <ul>
+        <li>Your data is stored with Google Firebase and protected by access rules so only you (and household members you invite) can read it</li>
+        <li>Data is encrypted in transit</li>
+        <li>We do not sell your personal information</li>
+      </ul>
+
+      <h2>4. Service Providers</h2>
+      <p>We use these providers to run the app:</p>
+      <ul>
+        <li><strong>Google Firebase</strong> — accounts, data storage and sync, saved receipt photos</li>
+        <li><strong>Google Gemini API</strong> — reading receipts you scan (see section 6)</li>
+        <li><strong>Resend</strong> — sending household invite emails and forwarding feedback to us</li>
+        <li><strong>Apple and Google</strong> — sign-in, and payments for subscriptions</li>
+      </ul>
+      <p>We do not sell your data, share your purchase history with advertisers, or use your data for advertising.</p>
+
+      <h2>5. Household Sharing</h2>
+      <p>When you join a household, its members can see the folders, items and purchases you share with it (not purchases you mark private). If you leave or delete your account, what you already shared with the household stays with its remaining members.</p>
+
+      <h2>6. Receipt Scanning</h2>
+      <p>When you scan a receipt, the image (or PDF) is sent to Google's Gemini API through our paid account. Gemini reads the store, items and prices and returns them to the app.</p>
+      <p>Under Google's terms for paid API use:</p>
+      <ul>
+        <li>Your receipts are not used to train or improve Google's AI models</li>
+        <li>Google does not keep them, except for a short period solely to detect abuse and meet legal requirements, after which they are deleted</li>
+      </ul>
+      <p>We do not use your receipts to train AI models either.</p>
+      <p>When "Save Receipt Images" is on, the image is also stored in our cloud storage so you can view it later. You can turn this off at any time.</p>
+
+      <h2>7. Your Rights</h2>
+      <p>You can:</p>
+      <ul>
+        <li>See and edit all your data in the app</li>
+        <li>Export it (Settings › Export &amp; Share)</li>
+        <li>Delete your account and data (Settings › Delete Account) — this removes your login, profile, purchases, items, folders and saved receipt photos</li>
+      </ul>
+
+      <h2>8. Children's Privacy</h2>
+      <p>The app is not intended for children under 13. We do not knowingly collect data from children.</p>
+
+      <h2>9. Changes to This Policy</h2>
+      <p>We may update this policy. We will notify you of significant changes in the app.</p>
+
+      <h2>10. Contact Us</h2>
+      <p>For privacy questions or data requests: <a href="mailto:privacy@chirpskate.com">privacy@chirpskate.com</a></p>
+      <p>Data Protection Officer: Chirp Skate Team, <a href="mailto:support@chirpskate.com">support@chirpskate.com</a></p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+  }
+  .legal h1 {
+    font-size: clamp(26px, 4vw, 38px);
+    margin-bottom: 8px;
+  }
+  .updated {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+</style>

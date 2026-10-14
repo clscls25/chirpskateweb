@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+// Keep in sync with _termsOfServiceContent in the app
+// (chirp_skate/lib/features/settings/screens/settings_screen.dart).
+---
+
+<BaseLayout
+  title="Terms of Service — Chirp Skate"
+  description="The terms for using the Chirp Skate app."
+>
+  <article class="legal">
+    <h1>Terms of Service</h1>
+    <p class="updated">Last updated: October 2026</p>
+
+    <div class="prose">
+      <h2>1. Acceptance of Terms</h2>
+      <p>By downloading, installing, or using Chirp Skate ("the App"), you agree to be bound by these Terms of Service.</p>
+
+      <h2>2. Description of Service</h2>
+      <p>Chirp Skate is a price tracking application that allows users to:</p>
+      <ul>
+        <li>Track purchase prices over time</li>
+        <li>Compare prices across stores</li>
+        <li>Scan receipts for automatic data entry</li>
+        <li>Share data with household members</li>
+      </ul>
+
+      <h2>3. User Accounts</h2>
+      <ul>
+        <li>You must provide accurate information when creating an account</li>
+        <li>You are responsible for maintaining the security of your account</li>
+        <li>You must be at least 13 years old to use this service</li>
+      </ul>
+
+      <h2>4. User Data</h2>
+      <ul>
+        <li>You retain ownership of all data you enter into the App</li>
+        <li>We store your data securely to provide the service</li>
+        <li>You can export or delete your data at any time</li>
+      </ul>
+
+      <h2>5. Acceptable Use</h2>
+      <p>You agree not to:</p>
+      <ul>
+        <li>Use the App for any illegal purpose</li>
+        <li>Attempt to gain unauthorized access to our systems</li>
+        <li>Share your account credentials with others</li>
+        <li>Upload malicious content or code</li>
+      </ul>
+
+      <h2>6. Subscription and Payments</h2>
+      <ul>
+        <li>Free trial period: 15 days</li>
+        <li>Premium features require a paid subscription</li>
+        <li>Subscriptions auto-renew unless cancelled</li>
+        <li>Refunds are subject to app store policies</li>
+      </ul>
+
+      <h2>7. Limitation of Liability</h2>
+      <p>The App is provided "as is" without warranties. We are not liable for:</p>
+      <ul>
+        <li>Data loss or corruption</li>
+        <li>Inaccurate price comparisons</li>
+        <li>Mistakes in receipts read by AI scanning — please review scanned items before saving</li>
+        <li>Service interruptions</li>
+      </ul>
+
+      <h2>8. Changes to Terms</h2>
+      <p>We may update these terms at any time. Continued use of the App constitutes acceptance of updated terms.</p>
+
+      <h2>9. Contact</h2>
+      <p>For questions about these terms, contact <a href="mailto:support@chirpskate.com">support@chirpskate.com</a>.</p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+  }
+  .legal h1 {
+    font-size: clamp(26px, 4vw, 38px);
+    margin-bottom: 8px;
+  }
+  .updated {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+</style>
