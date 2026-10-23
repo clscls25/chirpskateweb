@@ -2,7 +2,7 @@
 title: "Introducing Chirp Skate"
 description: "We built Chirp Skate because we kept wondering the same thing at the grocery store: did this go up? Here's the story."
 date: 2026-02-18
-author: Chirp Skate
+author: "Chirp Skate"
 ---
 
 We built Chirp Skate to answer one frustrating question: *did this get more expensive?*
@@ -25,7 +25,7 @@ Logging every purchase manually sounds tedious, so we made it fast. Snap a photo
 
 ## Unit cost comparison
 
-Price per package is almost meaningless when sizes vary. A 32 oz bottle of olive oil at $8.99 and a 16 oz bottle at $5.49 — which is cheaper? Chirp Skate calculates cost-per-unit so the answer is always right there.
+Price per package is almost meaningless when sizes vary. A 32 oz bottle of olive oil at $8.99 and a 20 oz bottle at $5.49 — which is cheaper? Chirp Skate calculates cost-per-unit so the answer is always right there.
 
 ## Household sharing
 
@@ -33,6 +33,6 @@ Invite your partner, roommates, or family. Everyone logs purchases to the same h
 
 ## What's next
 
-We're just getting started. Barcode scanning, price alerts, and smarter analytics are all on the roadmap. If there's a feature you'd like to see, reach out at [privacy@chirpskate.com](mailto:privacy@chirpskate.com) — we read everything.
+We're just getting started. If there's a feature you'd like to see, reach out at [privacy@chirpskate.com](mailto:privacy@chirpskate.com) — we read everything.
 
 Chirp Skate is available on iOS and Android.
