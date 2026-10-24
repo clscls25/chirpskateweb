@@ -3,7 +3,6 @@ title: "Canned beans vs dry beans"
 description: "I finally ran a comparison and I was surprised by the result!"
 date: 2026-10-23
 author: "Chirp Skate"
-draft: true
 ---
 
 I've always wondered which was cheaper, dried or canned beans. I never bothered to actually measure everything. Until today! 
