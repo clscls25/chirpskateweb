@@ -39,6 +39,10 @@ The canned Trader Joe's beans are surely some of the cheaper organic canned bean
 
 Of course there are numerous varieties of chickpeas. The canned Trader Joe's beans happen to be a larger variety, and the dry variety was smaller in this case. Both tasted about the same. You can probably argue dry taste better than canned but it's not a huge difference. Of note, they do add some salt to the canned beans so if you're watching your blood pressure or just get enough salt elsewhere, dry wins in that regard.
 
+
+![PXL 20261023 184313391](/blog-images/2026-10-24-pxl-20261023-184313391-623867.jpg)
+
+
 ## Dried beans in bulk can be even cheaper
 
 $3.79/lb is a good price for organic dried beans. I've seen specialty organic dried beans go for $6.00/lb. If you buy in bulk there are a few USA organic growers that sell 25-50lb bags which range in the $2-4/lb range, so very reasonable and some even have different varieties and colors. They are often sold out though probably due to high demand and not an unlimited supply. I have a feeling both the Trader Joe's can and the dry beans I got from the grocery store were grown overseas.
